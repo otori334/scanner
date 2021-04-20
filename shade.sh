@@ -29,10 +29,12 @@ else
     else
         mkdir "${DEST_DIR}"
     fi
-    for png in $(ls "$1/"*.png); do
-        # echo "${png}"
-        eval "${PY}" "${PROCESS_0}" '"'"${png}"'"' '"'"${SHADE_DIR}/${png##*/}"'"'
-        eval "${PY}" "${PROCESS_1}" '"'"${SHADE_DIR}/${png##*/}"'"'
-        eval "${PY}" "${PROCESS_2}" '"'"${SHADE_DIR}/${png##*/}"'"' '"'"${DEST_DIR}/${png##*/}"'"'
+    for file in $(ls "$1/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
+        # echo "${file}"
+        shade_name="${SHADE_DIR}/${${file##*/}%.*}.png"
+        dest_name="${DEST_DIR}/${shade_name##*/}"
+        eval \""${PY}"\" \""${PROCESS_0}"\" \""${file}"\" \""${shade_name}"\"
+        eval \""${PY}"\" \""${PROCESS_1}"\" \""${shade_name}"\" \""${shade_name}"\"
+        eval \""${PY}"\" \""${PROCESS_2}"\" \""${shade_name}"\" \""${dest_name}"\"
     done
 fi
