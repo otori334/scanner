@@ -10,6 +10,10 @@ img = cv2.imread(input_file_path)
 ksize = 51
 blur = cv2.blur(img, (ksize, ksize))
 
+# 0徐算が起きても後の処理によりnanはなくなるので警告を消すだけに留めた
+# https://teratail.com/questions/190718
+np.seterr(divide='ignore', invalid='ignore')
+
 rij = img/blur
 index_1 = np.where(rij >= 1.00) # 1以上の値があると邪魔なため
 rij[index_1] = 1

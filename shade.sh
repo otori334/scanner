@@ -22,19 +22,20 @@ if [ $# -ne 1 ]; then
 elif [ ! -d "$1" ]; then
     echo "${CMD_NAME}: $1: No such directory." 1>&2
     exit
-else
-    if [ -d "${DEST_DIR}" ]; then
-        rm -rf "${DEST_DIR}"
-        mkdir "${DEST_DIR}"
-    else
-        mkdir "${DEST_DIR}"
-    fi
-    for file in $(ls "$1/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
-        # echo "${file}"
-        shade_name="${SHADE_DIR}/${${file##*/}%.*}.png"
-        dest_name="${DEST_DIR}/${shade_name##*/}"
-        eval \""${PY}"\" \""${PROCESS_0}"\" \""${file}"\" \""${shade_name}"\"
-        eval \""${PY}"\" \""${PROCESS_1}"\" \""${shade_name}"\" \""${shade_name}"\"
-        eval \""${PY}"\" \""${PROCESS_2}"\" \""${shade_name}"\" \""${dest_name}"\"
-    done
 fi
+
+if [ -d "${DEST_DIR}" ]; then
+    rm -rf "${DEST_DIR}"
+    mkdir "${DEST_DIR}"
+else
+    mkdir "${DEST_DIR}"
+fi
+
+for file in $(ls "$1/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
+    # echo "${file}"
+    shade_name="${SHADE_DIR}/${${file##*/}%.*}.png"
+    dest_name="${DEST_DIR}/${shade_name##*/}"
+    eval \"${PY}\" \"${PROCESS_0}\" \"${file}\" \"${shade_name}\"
+    eval \"${PY}\" \"${PROCESS_1}\" \"${shade_name}\" \"${shade_name}\"
+    eval \"${PY}\" \"${PROCESS_2}\" \"${shade_name}\" \"${dest_name}\"
+done
