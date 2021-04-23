@@ -8,7 +8,7 @@ readonly CMD_NAME="${0##*/}"
 readonly CMD_DIR="${0%/${CMD_NAME}}"
 readonly TMP_DIR="/tmp"
 readonly SHADE_DIR="${TMP_DIR}/${CMD_NAME%.*}_"$$
-readonly DEST_DIR="$1/../${1##*/}_"
+readonly DEST_DIR="{$1%/}/../${1##*/}_"
 readonly PY_DIR="${CMD_DIR}/py"
 readonly PROCESS_0="${PY_DIR}/threshold_otsu.py"
 readonly PROCESS_1="${PY_DIR}/graphics.py"
@@ -31,7 +31,7 @@ else
     mkdir "${DEST_DIR}"
 fi
 
-for file in $(ls "$1/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
+for file in $(ls "${1%/}/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
     # echo "${file}"
     shade_name="${SHADE_DIR}/${${file##*/}%.*}.png"
     dest_name="${DEST_DIR}/${shade_name##*/}"
