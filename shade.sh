@@ -10,9 +10,10 @@ readonly TMP_DIR="/tmp"
 readonly SHADE_DIR="${TMP_DIR}/${CMD_NAME%.*}_"$$
 readonly DEST_DIR="{$1%/}/../${1##*/}_"
 readonly PY_DIR="${CMD_DIR}/py"
-readonly PROCESS_0="${PY_DIR}/threshold_otsu.py"
-readonly PROCESS_1="${PY_DIR}/graphics.py"
-readonly PROCESS_2="${PY_DIR}/threshold.py"
+readonly PROCESS_0="${PY_DIR}/homography.py"
+readonly PROCESS_1="${PY_DIR}/threshold_otsu.py"
+readonly PROCESS_2="${PY_DIR}/graphics.py"
+readonly PROCESS_3="${PY_DIR}/threshold.py"
 trap 'rm -rf "${SHADE_DIR}" && exit' 0 1 2 3 15 && mkdir -p "${SHADE_DIR}"
 
 
@@ -37,5 +38,6 @@ for file in $(ls "${1%/}/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
     dest_name="${DEST_DIR}/${shade_name##*/}"
     eval \"${PY}\" \"${PROCESS_0}\" \"${file}\" \"${shade_name}\"
     eval \"${PY}\" \"${PROCESS_1}\" \"${shade_name}\" \"${shade_name}\"
-    eval \"${PY}\" \"${PROCESS_2}\" \"${shade_name}\" \"${dest_name}\"
+    eval \"${PY}\" \"${PROCESS_2}\" \"${shade_name}\" \"${shade_name}\"
+    eval \"${PY}\" \"${PROCESS_3}\" \"${shade_name}\" \"${dest_name}\"
 done
