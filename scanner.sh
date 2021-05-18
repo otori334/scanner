@@ -14,6 +14,7 @@ readonly PROCESS_020="${PY_DIR}/threshold_otsu.py"
 readonly PROCESS_030="${PY_DIR}/graphics.py"
 readonly PROCESS_040="${PY_DIR}/threshold.py"
 readonly PROCESS_050="${PY_DIR}/trim.py"
+readonly PROCESS_060="${PY_DIR}/closing.py"
 trap 'rm -rf "${TMP_DIR}" && exit' 0 1 2 3 15 && mkdir -p "${TMP_DIR}"
 
 
@@ -39,6 +40,8 @@ for file in $(ls "${1%/}/"*.(png|PNG|jpg|jpeg|JPG|JPEG)); do
     eval \"${PY}\" \"${PROCESS_010}\" \"${file}\" \"${tmp_name}\"
     eval \"${PY}\" \"${PROCESS_020}\" \"${tmp_name}\" \"${tmp_name}\"
     eval \"${PY}\" \"${PROCESS_030}\" \"${tmp_name}\" \"${tmp_name}\"
+    #eval \"${PY}\" \"${PROCESS_040}\" \"${tmp_name}\" \"${tmp_name}\"
     eval \"${PY}\" \"${PROCESS_040}\" \"${tmp_name}\" \"${dest_name}\"
     #eval \"${PY}\" \"${PROCESS_050}\" \"${file}\" \"${dest_name}\"
+    #eval \"${PY}\" \"${PROCESS_060}\" \"${file}\" \"${dest_name}\"
 done
