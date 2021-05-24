@@ -7,7 +7,8 @@ output_file_path = sys.argv[2]
 
 img = cv2.imread(input_file_path)
 
-kernel = np.ones((2,2),np.uint8)
+# 膨張と組み合わせたら罫線を除いた文字領域を取得できそう
+kernel = np.ones((4,1),np.uint8)
 
 closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
