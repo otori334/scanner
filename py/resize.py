@@ -7,7 +7,7 @@ from PIL import Image
 
 input_file_path = sys.argv[1]
 output_file_path = sys.argv[2]
-height = float(sys.argv[3])
+height = int(round(float(sys.argv[3])))
 #height=300
 
 img = Image.open(input_file_path, 'r')
