@@ -14,7 +14,7 @@ readonly PROCESS_020="${PY_DIR}/threshold_otsu.py"
 readonly PROCESS_030="${PY_DIR}/graphics.py"
 readonly PROCESS_040="${PY_DIR}/threshold.py"
 readonly PROCESS_050="${PY_DIR}/trim.py"
-readonly PROCESS_060="${PY_DIR}/closing.py"
+readonly PROCESS_060="${PY_DIR}/rule_eraser.py"
 readonly PROCESS_070="${PY_DIR}/resize.py"
 trap 'rm -rf "${TMP_DIR}" && exit' 0 1 2 3 15 && mkdir -p "${TMP_DIR}"
 
