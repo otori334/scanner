@@ -6,22 +6,22 @@ import numpy as np
 input_file_path = sys.argv[1]
 output_file_path = sys.argv[2]
 
-img1 = cv2.imread(input_file_path, 0)
+img = cv2.imread(input_file_path, 0)
 
 # 大雑把に罫線を消す
 kernel = np.ones((4, 1), np.uint8)
-closing1 = cv2.morphologyEx(img1, cv2.MORPH_CLOSE, kernel)
+closing1 = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
 # 除いた罫線
 # https://emotionexplorer.blog.fc2.com/blog-entry-181.html
-bitwise1 = cv2.bitwise_xor(img1, closing1)
+bitwise1 = cv2.bitwise_xor(img, closing1)
 
 # ブランク画像を作成
-rows, cols = img1.shape
+rows, cols = img.shape
 blank = np.zeros((rows, cols, 3), np.uint8)
 blank = cv2.cvtColor(blank, cv2.COLOR_BGR2GRAY)
 
-#←全ゼロデータに255を足してホワイトにする
+# 全ゼロデータに255を足してホワイトにする
 blank += 255
 
 # https://kyudy.hatenablog.com/entry/2019/10/26/141330
@@ -40,7 +40,7 @@ kernel = np.ones((10,10),np.uint8)
 line1 = cv2.erode(line1,kernel,iterations = 2)
 
 # 罫線の周囲を切り取る
-bitwise2 = cv2.bitwise_or(img1, line1)
+bitwise2 = cv2.bitwise_or(img, line1)
 
 # 大雑把に罫線を消す
 kernel = np.ones((4,1),np.uint8)
@@ -63,7 +63,7 @@ line2 = 255 - line1
 
 # 合成
 bitwise3 = cv2.bitwise_or(closing3, erosion1)
-bitwise4 = cv2.bitwise_or(img1, line2)
+bitwise4 = cv2.bitwise_or(img, line2)
 bitwise5 = cv2.bitwise_and(bitwise3, bitwise4)
 
 """
