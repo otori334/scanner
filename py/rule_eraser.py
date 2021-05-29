@@ -9,6 +9,7 @@ output_file_path = sys.argv[2]
 img = cv2.imread(input_file_path, 0)
 
 # 大雑把に罫線を消す
+# http://labs.eecs.tottori-u.ac.jp/sd/Member/oyamada/OpenCV/html/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html
 kernel = np.ones((4, 1), np.uint8)
 closing1 = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
@@ -37,14 +38,11 @@ for y in loc_y_spike[0]:
 
 # 線の歪みを考慮して線のシルエットを大きくする
 kernel = np.ones((10,10),np.uint8)
-line1 = cv2.erode(line1,kernel,iterations = 2)
-
-# 罫線の周囲を切り取る
-bitwise2 = cv2.bitwise_or(img, line1)
+line2 = cv2.erode(line1,kernel,iterations = 2)
 
 # 大雑把に罫線を消す
 kernel = np.ones((4,1),np.uint8)
-closing2 = cv2.morphologyEx(bitwise2, cv2.MORPH_CLOSE, kernel)
+closing2 = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
 # 黒をつなげる
 kernel = np.ones((10, 150), np.uint8) 
@@ -56,15 +54,15 @@ erosion1 = cv2.erode(opening1, kernel, iterations = 1)
 
 # 大雑把に罫線を消す
 kernel = np.ones((3,1),np.uint8)
-closing3 = cv2.morphologyEx(bitwise2, cv2.MORPH_CLOSE, kernel)
+closing3 = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
 # 白黒反転
-line2 = 255 - line1
+line3 = 255 - line2
 
 # 合成
-bitwise3 = cv2.bitwise_or(closing3, erosion1)
-bitwise4 = cv2.bitwise_or(img, line2)
-bitwise5 = cv2.bitwise_and(bitwise3, bitwise4)
+bitwise2 = cv2.bitwise_or(closing3, erosion1)
+bitwise3 = cv2.bitwise_or(img, line3)
+bitwise4 = cv2.bitwise_and(bitwise2, bitwise3)
 
 """
 cv2.imshow("bitwise5", bitwise5)
