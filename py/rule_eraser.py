@@ -45,11 +45,11 @@ kernel = np.ones((4,1),np.uint8)
 closing2 = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
 # 黒をつなげる
-kernel = np.ones((10, 150), np.uint8) 
+kernel = np.ones((20, 200), np.uint8) 
 opening1 = cv2.morphologyEx(closing2, cv2.MORPH_OPEN, kernel)
 
 # 黒を太くする
-kernel = np.ones((5,1),np.uint8)
+kernel = np.ones((10,10),np.uint8)
 erosion1 = cv2.erode(opening1, kernel, iterations = 1)
 
 # 大雑把に罫線を消す
