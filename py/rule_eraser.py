@@ -10,7 +10,8 @@ output_file_path = sys.argv[2]
 split_cols = 10
 
 # 罫線の閾値
-line_th = 3
+line_th1 = 4
+line_th2 = 6
 
 img = cv2.imread(input_file_path, 0)
 rows, cols = img.shape
@@ -41,9 +42,10 @@ blank = cv2.cvtColor(blank, cv2.COLOR_BGR2GRAY)
 # 全ゼロデータに255を足してホワイトにする
 blank += 255
 line1 = blank.copy()
+line2 = blank.copy()
 
 # https://kyudy.hatenablog.com/entry/2019/10/26/141330
-thresh_spike = cols / line_th // split_cols
+thresh_spike = cols / line_th1 // split_cols
 vp = {}
 loc_y_spike = {}
 for index in range(split_cols):
@@ -65,9 +67,20 @@ for mod_index in range(mod1):
     split_cols_index += 1
     x1 = x2
 
-# 線の歪みを考慮して線のシルエットを大きくする
-kernel = np.ones((5,5),np.uint8)
-line2 = cv2.erode(line1,kernel,iterations = 2)
+# 短い罫線を除く
+thresh_spike = cols // line_th2
+vp[split_cols] = np.sum((bitwise1 != 0).astype(np.uint8), axis=1)
+loc_y_spike[split_cols] = np.where(vp[split_cols] > thresh_spike)
+for y in loc_y_spike[split_cols]:
+    line2[y] = 0
+kernel = np.ones((20,20),np.uint8)
+line3 = cv2.erode(line2,kernel,iterations = 2)
+bitwise2 = cv2.bitwise_or(line1, line3)
+
+# 線の歪みを考慮して線のシルエットを大きくする　
+# この処理の影響が小さいほど誤りは減る
+kernel = np.ones((3,3),np.uint8)
+line4 = cv2.erode(bitwise2,kernel,iterations = 2)
 
 # 大雑把に罫線を消す
 kernel = np.ones((4,1),np.uint8)
@@ -86,17 +99,17 @@ kernel = np.ones((3,1),np.uint8)
 closing3 = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
 
 # 白黒反転
-line3 = 255 - line2
+line5 = 255 - line4
 
 # 合成
-bitwise2 = cv2.bitwise_or(closing3, erosion1)
-bitwise3 = cv2.bitwise_or(img, line3)
-bitwise4 = cv2.bitwise_and(bitwise2, bitwise3)
+bitwise3 = cv2.bitwise_or(closing3, erosion1)
+bitwise4 = cv2.bitwise_or(img, line5)
+bitwise5 = cv2.bitwise_and(bitwise3, bitwise4)
 
 """
-cv2.imshow("bitwise5", bitwise5)
+cv2.imshow("bitwise5", bitwise5); cv2.waitKey(0); quit()
 cv2.imshow("img", img)
 cv2.waitKey(0)
 """
 
-cv2.imwrite(output_file_path, bitwise4)
+cv2.imwrite(output_file_path, bitwise5)
