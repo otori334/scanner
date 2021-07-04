@@ -5,7 +5,7 @@ import numpy as np
 
 input_file_path = sys.argv[1]
 output_file_path = sys.argv[2]
-swap = sys.argv[3]
+swap = int(sys.argv[3])
 
 img = cv2.imread(input_file_path, 0)
 
